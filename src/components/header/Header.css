@@ -1,0 +1,9 @@
+.navList
+{
+    list-style: none;
+    display: flex;
+}
+.navList li 
+{
+    padding: 1rem 2rem 1rem 2rem;
+}
