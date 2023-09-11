@@ -6,7 +6,8 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-function Feed(props: any, isLiked:any) {
+function Feed(props: any) {
+  const {isLiked} = props;
   console.log(isLiked);
   const { getImageURL, HandleLike, userId } = useContext(AuthorizationContext);
   const [url, setURL] = useState<string>("");
@@ -16,9 +17,14 @@ function Feed(props: any, isLiked:any) {
   });
 
   return (
-    <div className="w-auto">
-      <Card sx={{ maxWidth: "auto" }}>
-        <CardMedia sx={{ height: 500 }} image={url} title={props.Name} />
+    <div className="w-auto bg-white border-solid border-b-4 border-t-4 border-grey-100 rounded-lg p-4 mb-4 flex justify-center">
+      <Card className="w-4/5 text-gray-700 mb-2 border-2 border-grey-100 " sx={{ maxWidth: "auto" }}>
+        <CardMedia
+          className="w-full rounded-lg mb-2"
+          sx={{ height: 500 }}
+          image={url}
+          title={props.Name}
+        />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             Caption
@@ -32,7 +38,7 @@ function Feed(props: any, isLiked:any) {
             size="small"
             onClick={() => HandleLike(props.ImageID, userId)}
           >
-            Like
+            {isLiked ? "Liked" : "Like"}
           </Button>
           <Button size="small">Comments</Button>
         </CardActions>

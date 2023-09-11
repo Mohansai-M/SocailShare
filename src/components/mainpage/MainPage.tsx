@@ -1,59 +1,113 @@
 import React, { useContext, useEffect, useState } from "react";
 import "./MainPage.css";
 import { AuthorizationContext } from "../../ContextAPI";
-import 'tailwindcss/tailwind.css';
+import "tailwindcss/tailwind.css";
 import Feed from "../Feed/Feed";
 
 function MainPage() {
   const {
     handleCreateNewListing,
     FilteredPosts,
-    LikedBy,
+    userId,
     PostDocs,
-    listAllPosts,FilterAllPosts,
+    Following,
+    listAllPosts,
+    setFilteredPosts,
+    setLikedBy,
   } = useContext(AuthorizationContext);
 
   const [Post, setPost] = useState<File | null>(null);
   const [Posts, setPosts] = useState<any | null>([]);
   const [Name, setName] = useState("");
   const [Caption, setCaption] = useState("");
+  const [CommonPosts, setCommonPosts] = useState<any | null>([]);
+  const [CommonIds, setCommonIds] = useState<any | null>([]);
 
   const HandlePostUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
-    console.log(e)
+    console.log(e);
     if (files && files.length > 0) {
       const file = files[0];
-      setName(file.name)
+      setName(file.name);
       setPost(file);
     } else {
       setPost(null);
     }
   };
-    
-  const handleSubmit = async (e:React.FormEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await handleCreateNewListing(Name, Post, Caption);
   };
 
-useEffect(() => {
-  console.log(PostDocs);
-  //FilterAllPosts();
-},[]);
+  const LikedPostsFilter =  (FilteredLocal: any[]) => {
+    const LikedPosts: any[] = [];
+    FilteredLocal.map((post: any) => {
+      if (userId === Object.keys(post.likes)[0]) {
+        LikedPosts.push(post.ImageID);
+      }
+      setLikedBy(LikedPosts);
+    });
+
+    return LikedPosts;
+  };
+
+  const FilterPosts = (postsByFriends: any[]) => {
+    const FilteredLocal: any[] = [];
+    postsByFriends.filter((post: any) => {
+      console.log(Following);
+      const isFriend = post.userID in Following;
+      if (isFriend) {
+        FilteredLocal.push(post);
+      }
+      setFilteredPosts(FilteredLocal);
+    });
+
+    return FilteredLocal;
+  };
+
+  const FilterLikes = (LikesLocal: any[]) => {
+    const commonPostsIds = new Set(
+      LikesLocal.map((LikedPost: any) => LikedPost)
+    );
+    setCommonIds(commonPostsIds);
+
+    const commonPosts = FilteredPosts.filter((post: any) =>
+      commonPostsIds.has(post.id)
+    );
+    setCommonPosts(commonPosts);
+  };
+  useEffect(() => {
+    const postsByFriends: any[] = [];
+    listAllPosts().then((posts: any) => {
+      posts.forEach((doc: any) => {
+        postsByFriends.push(doc.data());
+      });
+      setPosts(postsByFriends);
+      const FilteredLocal = FilterPosts(postsByFriends);
+      const LikesLocal = LikedPostsFilter(FilteredLocal);
+      FilterLikes(LikesLocal);
+    });
+  }, [FilteredPosts]);
 
   return (
-    <div className="mainPage col-span-4 rounded-xl shadow border h-30  bg-gray-50">
+    <div className="mainPage col-span-4 rounded-xl border h-30 white">
       <form onSubmit={handleSubmit}>
         <input type="file" accept="image/*" onChange={HandlePostUpload} />
         <input onChange={(e) => setCaption(e.target.value)} type="text" />
         <button type="submit">Create</button>
       </form>
-
       <div>
-        {FilteredPosts.map((localpost: any) => (
-          <div key={localpost.ImageID} id={localpost.ImageID}>
-            <Feed {...localpost} />
-          </div>
-        ))}
+        {FilteredPosts.filter((post: any) => CommonIds.has(post.ImageID)).map(
+          (post: any) => (
+            <Feed key={post.id} post={post} isLiked={true} {...post} />
+          )
+        )}
+        {FilteredPosts.filter((post: any) => !CommonIds.has(post.ImageID)).map(
+          (post: any) => (
+            <Feed key={post.id} post={post} isLiked={false} {...post} />
+          )
+        )}
       </div>
     </div>
   );

@@ -1,20 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "./server/FireBase";
-import {
-  getDatabase,
-  ref as Ref,
-  get,
-  onValue,
-  update,
-} from "firebase/database";
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  updateDoc,
-} from "firebase/firestore";
+import { getDatabase,ref as Ref,get,onValue,update } from "firebase/database";
+import { getFirestore, collection, addDoc, getDocs, updateDoc, } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const AuthorizationContext = createContext<any>("");
@@ -36,6 +24,7 @@ const AuthProvider = (props: any) => {
   const [userIds, setUserIds] = useState<any>([]);
   const [FriendRequestsSent, setFriendRequestsSent] = useState([]);
   const [FriendRequestsReceived, setFriendRequestsReceived] = useState([]);
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -46,7 +35,12 @@ const AuthProvider = (props: any) => {
 
           const userId = user.uid;
           setUserId(userId);
-
+          const querySnapshot = await getDocs(collection(firestore, "Posts"));
+          const postsByFriends: any[] = [];
+          querySnapshot.forEach(async (doc) => {
+            postsByFriends.push(doc.data());
+          });
+          setPostDocs(postsByFriends);
           // Retrieve user data
           const userRef = Ref(database, `users/${userId}`);
           const userSnapshot = await get(userRef);
@@ -70,8 +64,11 @@ const AuthProvider = (props: any) => {
         setUserEmail(null);
         setLoading(false);
       }
+
+    
     });
 
+    console.log(PostDocs)
     const userCountRef = Ref(database, "users");
     onValue(userCountRef, (snapshot) => {
       const data = snapshot.val();
@@ -124,12 +121,7 @@ const AuthProvider = (props: any) => {
   };
 
   const FilterAllPosts = async () => {
-    const querySnapshot = await getDocs(collection(firestore, "Posts"));
-    const postsByFriends: any[] = [];
-    querySnapshot.forEach(async (doc) => {
-      postsByFriends.push(doc.data());
-    });
-    setPostDocs(postsByFriends);
+
 
     const FilteredLocal: any[] = [];
     PostDocs.filter((post: any) => {
@@ -264,6 +256,8 @@ const AuthProvider = (props: any) => {
         FilteredPosts,
         HandleLike,
         LikedBy,
+        setFilteredPosts,
+        setLikedBy,
       }}
     >
       {props.children}

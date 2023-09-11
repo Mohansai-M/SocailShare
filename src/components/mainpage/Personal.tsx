@@ -10,7 +10,7 @@ function Personal() {
 
 
     return (
-      <div className="col-span-2 rounded-xl shadow border h-30 bg-gray-50 flex justify-center">
+      <div>
         <div className="mt-4 justify-center">
           <div className="flex justify-center">
             <h1 className="hidden lg:inline-block py-4 px-10 bg-gray-200 hover:bg-gray-300 text-lg text-gray-900 font-bold  rounded-xl transition duration-200">
