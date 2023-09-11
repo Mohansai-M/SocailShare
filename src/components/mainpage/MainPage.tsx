@@ -4,12 +4,12 @@ import { AuthorizationContext } from "../../ContextAPI";
 import "tailwindcss/tailwind.css";
 import Feed from "../Feed/Feed";
 
+
 function MainPage() {
   const {
     handleCreateNewListing,
     FilteredPosts,
     userId,
-    PostDocs,
     Following,
     listAllPosts,
     setFilteredPosts,
@@ -55,14 +55,16 @@ function MainPage() {
   const FilterPosts = (postsByFriends: any[]) => {
     const FilteredLocal: any[] = [];
     postsByFriends.filter((post: any) => {
-      console.log(Following);
-      const isFriend = post.userID in Following;
-      if (isFriend) {
-        FilteredLocal.push(post);
+      if (Following && Object.keys(Following).length > 0) {
+        const isFriend = post.userID in Following;
+        if (isFriend) {
+          FilteredLocal.push(post);
+        }
       }
-      setFilteredPosts(FilteredLocal);
     });
 
+
+    setFilteredPosts(FilteredLocal);
     return FilteredLocal;
   };
 
@@ -78,25 +80,31 @@ function MainPage() {
     setCommonPosts(commonPosts);
   };
   useEffect(() => {
+    console.log("ok")
     const postsByFriends: any[] = [];
-    listAllPosts().then((posts: any) => {
-      posts.forEach((doc: any) => {
-        postsByFriends.push(doc.data());
-      });
-      setPosts(postsByFriends);
-      const FilteredLocal = FilterPosts(postsByFriends);
-      const LikesLocal = LikedPostsFilter(FilteredLocal);
-      FilterLikes(LikesLocal);
-    });
-  }, [FilteredPosts]);
+   listAllPosts().then((posts: any) => {
+     posts.forEach((doc: any) => {
+       postsByFriends.push(doc.data());
+     });
+     const FilteredLocal = FilterPosts(postsByFriends);
+     const LikesLocal = LikedPostsFilter(FilteredLocal);
+      const commonPostsIds = new Set(
+        LikesLocal.map((LikedPost: any) => LikedPost)
+      );
+      setCommonIds(commonPostsIds);
+     setPosts(postsByFriends);
+   });
+  },[Following]);
 
   return (
     <div className="mainPage col-span-4 rounded-xl border h-30 white">
-      <form onSubmit={handleSubmit}>
-        <input type="file" accept="image/*" onChange={HandlePostUpload} />
-        <input onChange={(e) => setCaption(e.target.value)} type="text" />
-        <button type="submit">Create</button>
-      </form>
+  
+  <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+  <input type="file" accept="image/*" onChange={HandlePostUpload} className="py-2 px-4 border rounded-lg" />
+  <input onChange={(e) => setCaption(e.target.value)} type="text" className="py-2 px-4 border rounded-lg" placeholder="Provide a Caption"/>
+  <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">Post</button>
+</form>
+
       <div>
         {FilteredPosts.filter((post: any) => CommonIds.has(post.ImageID)).map(
           (post: any) => (

@@ -39,7 +39,7 @@ function Login() {
     <div className="login-page flex items-center justify-center mt-20">
       <form
         onSubmit={loginSubmit}
-        className="bg-slate-100 w-full max-w-prose shadow-md rounded px-8 pt-6 pb-3 mb-4"
+        className="w-full max-w-screen-sm bg-white border-solid border-2 border-grey-100 rounded-lg p-4 mb-4 flex justify-center"
       >
         <div className="md:flex md:items-center mb-2 mt-4">
           <div className="flex flex-wrap items-center justify-center">

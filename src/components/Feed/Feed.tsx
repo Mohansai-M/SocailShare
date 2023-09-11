@@ -6,19 +6,43 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import "./Feed.css";
 function Feed(props: any) {
   const {isLiked} = props;
-  console.log(isLiked);
   const { getImageURL, HandleLike, userId } = useContext(AuthorizationContext);
   const [url, setURL] = useState<string>("");
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState<string[]>([]);
+  const [comment, setComment] = useState<string>("");
+
+  const handleShowComments = () => {
+    setShowComments(true);
+  };
+
+  const handleAddComment = (comment: string) => {
+    setComments([...comments, comment]);
+  };
 
   useEffect(() => {
     getImageURL(props.imageURL).then((url: string) => setURL(url));
   });
+  const [isExtended, setIsExtended] = useState(false);
+  const [div, setDiv] = useState<string>("");
 
+ const handleClick = (ImageID:string) => {
+   setIsExtended(!isExtended);
+   if (isExtended) {
+     setDiv("OK");
+   } else {
+     setDiv("");
+   }
+ };
   return (
     <div className="w-auto bg-white border-solid border-b-4 border-t-4 border-grey-100 rounded-lg p-4 mb-4 flex justify-center">
-      <Card className="w-4/5 text-gray-700 mb-2 border-2 border-grey-100 " sx={{ maxWidth: "auto" }}>
+      <Card
+        className="w-4/5 text-gray-700 mb-2 border-2 border-grey-100 "
+        sx={{ maxWidth: "auto" }}
+      >
         <CardMedia
           className="w-full rounded-lg mb-2"
           sx={{ height: 500 }}
@@ -40,8 +64,53 @@ function Feed(props: any) {
           >
             {isLiked ? "Liked" : "Like"}
           </Button>
-          <Button size="small">Comments</Button>
+          <Button size="small" id="comments" onClick={() => handleClick(props.ImageID)}>
+              Comments
+            </Button>
+          <div>
+          </div>
         </CardActions>
+        {isExtended ? (
+          <div>
+           <div className="w-full max-w-5xl mx-auto">
+  <div className="bg-white shadow-md rounded-lg p-6">
+    <h2 className="text-lg font-semibold mb-4">Comments</h2>
+    <ul className="divide-y divide-gray-200">
+      <li className="py-4">
+        <div className="flex items-center">
+          <div>
+            <h4 className="font-semibold">
+            { Object.keys(props.comments).map((commentKey: any) => (
+              (commentKey === "userId") ?
+              (
+                props.comments[commentKey]
+              ):("")
+            ))}
+            </h4>
+          </div>
+        </div>
+        <p className="text-gray-800">
+          {Object.keys(props.comments).map((commentKey: any) => (
+              (commentKey === "comment") ?
+              (
+                props.comments[commentKey]
+              ):("")
+            ))}</p>
+      </li>
+    </ul>
+    <div className="mt-6">
+    <input className="w-full h-16 p-2 border rounded-lg focus:ring focus:ring-gray-100 focus:outline-none" placeholder="Write a comment..."/>
+    <div className="mt-2">
+    <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300">Post Comment</button>
+    </div>
+   </div>
+  </div>
+</div>
+
+          </div>
+        ) : (
+          <div></div>
+        )}
       </Card>
     </div>
   );

@@ -35,12 +35,7 @@ const AuthProvider = (props: any) => {
 
           const userId = user.uid;
           setUserId(userId);
-          const querySnapshot = await getDocs(collection(firestore, "Posts"));
-          const postsByFriends: any[] = [];
-          querySnapshot.forEach(async (doc) => {
-            postsByFriends.push(doc.data());
-          });
-          setPostDocs(postsByFriends);
+
           // Retrieve user data
           const userRef = Ref(database, `users/${userId}`);
           const userSnapshot = await get(userRef);
@@ -120,26 +115,6 @@ const AuthProvider = (props: any) => {
     return await getDocs(collection(firestore, "Posts"));
   };
 
-  const FilterAllPosts = async () => {
-
-
-    const FilteredLocal: any[] = [];
-    PostDocs.filter((post: any) => {
-      const isFriend = post.userID in Following;
-      if (isFriend) {
-        FilteredLocal.push(post);
-      }
-    });
-    setFilteredPosts(FilteredLocal);
-
-    const LikedPosts: any[] = [];
-    FilteredPosts.map((post: any) => {
-      if (userId === Object.keys(post.likes)[0]) {
-        LikedPosts.push(post.ImageID);
-      }
-      setLikedBy(LikedPosts);
-    });
-  };
 
   const getImageURL = async (path: any) => {
     try {
@@ -173,6 +148,7 @@ const AuthProvider = (props: any) => {
     } else {
       setFriendRequestsSent(userData.friendRequestsSent);
     }
+    return userData.friendRequestsSent;
   };
 
   const HanldeAddFriend = async (Name: string) => {
@@ -185,7 +161,7 @@ const AuthProvider = (props: any) => {
     userData.friendRequestsSent.push(Name);
 
     await update(Ref(database, `users/${Name}/friendRequestsReceived`), {
-      userId,
+     
     });
     await update(userRef, userData);
   };
@@ -230,6 +206,28 @@ const AuthProvider = (props: any) => {
     await update(userRef, userData);
   };
 
+  const CancelRequestHandler = async (Name: string,userId:any) => {
+    const userRef = Ref(database, `users/${userId}`);
+    const userSnapshot = await get(userRef);
+    const userData = userSnapshot.val();
+    const NameRef = Ref(database, `users/${Name}`);
+    const Namesnapshot = await get(NameRef);
+    const NameData = Namesnapshot.val();
+   if (Object.values(userData.friendRequestsSent).includes(Name)) {
+     userData.friendRequestsSent.splice(
+       Object.values(userData.friendRequestsSent).indexOf(Name),
+       1
+     );}
+   
+    if (Object.values(NameData.friendRequestsReceived).includes(userId)) {
+      const friendRequestsReceived = NameData.friendRequestsReceived["userId"];
+      console.log(typeof(friendRequestsReceived))
+    }
+
+    await update(userRef, userData);
+    await update(NameRef, NameData);
+  };
+
   const LoggedIn: boolean = !!userEmail;
 
   return (
@@ -244,7 +242,6 @@ const AuthProvider = (props: any) => {
         FriendRequests,
         handleCreateNewListing,
         listAllPosts,
-        FilterAllPosts,
         getImageURL,
         HanldeAddFriend,
         userIds,
@@ -253,6 +250,7 @@ const AuthProvider = (props: any) => {
         FriendRequestsReceived,
         FriendRequestsSent,
         AcceptRequestHandler,
+        CancelRequestHandler,
         FilteredPosts,
         HandleLike,
         LikedBy,

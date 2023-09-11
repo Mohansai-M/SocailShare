@@ -1,68 +1,43 @@
+import Header from "../header/Header";
 import MainPage from "./MainPage";
 import Personal from "./Personal";
 import UserSuggestions from "./UserSuggestions";
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+
 function WebPage() {
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const [isHidden, setIsHidden] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
-  const handleResize = () => {
-    setScreenWidth(window.innerWidth);
-  };
-
-  const toggleHidden = () => {
-    setIsHidden(!isHidden);
-  };
-
-  const hideDivs = () => {
-    if (window.innerWidth <= 1000) {
-      setIsHidden(true);
-    } else {
-      setIsHidden(false);
-    }
-  };
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", hideDivs);
-    return () => window.removeEventListener("resize", hideDivs);
-  }, []);
+  const cards = [
+    { title: "Card 1", content: "This is the content for Card 1." },
+    { title: "Card 2", content: "This is the content for Card 2." },
+    { title: "Card 3", content: "This is the content for Card 3." },
+  ];
 
   return (
-    <div className="container mx-auto mt-4">
-      <div className="flex items-center justify-center">
-        {/*<div className= "grid grid-cols-3 p-8 gap-8 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 xl:grid-cols-6">*/}
-        <div className="grid grid-cols-4 grid-rows-0 gap-4 border-solid">
-          <div
-            className={
-              isHidden
-                ? "hidden"
-                : "rounded-xl border bg-white shadow-lg flex justify-center h-1/4"
-            }
-            onClick={toggleHidden}
-          >
-            <Personal></Personal>
+    <div className="bg-gray-100 min-h-screen p-4">
+      <div className="mx-auto">
+        <h1 className="text-3xl font-semibold mb-4">Social Media Cards</h1>
+        <div className="flex flex-wrap">
+          {/* 1st Card - Shown on all screen sizes */}
+          <div className="w-full lg:w-1/4">
+            <div className="bg-white rounded-lg shadow-lg p-4 m-4">
+              <Personal></Personal>
+            </div>
           </div>
-          <div className="mainPage col-span-2 rounded-xl border h-30 bg-white">
-            <MainPage></MainPage>
+
+          {/* 2nd Card - Shown on all screen sizes */}
+          <div className="w-full lg:w-2/4">
+            <div className="bg-white rounded-lg shadow-lg p-4 m-4">
+              <MainPage></MainPage>
+            </div>
           </div>
-          <div
-            className={
-              isHidden
-                ? "hidden"
-                : "col-start-4 rounded-xl border bg-white shadow-lg flex justify-center h-1/4"
-            }
-            onClick={toggleHidden}
-          >
-            <UserSuggestions></UserSuggestions>
+
+          {/* 3rd Card - Hidden on screens smaller than lg */}
+          <div className="hidden lg:w-1/4 lg:block">
+            <div className="bg-white rounded-lg shadow-lg p-4 m-4">
+              <UserSuggestions></UserSuggestions>
+            </div>
           </div>
         </div>
       </div>
-      <button onClick={hideDivs}>Hide divs</button>
     </div>
   );
 }

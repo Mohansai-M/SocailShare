@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import TextField from "@mui/material/TextField";
 import { app } from "../../server/FireBase";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getDatabase, ref, set } from "firebase/database";
 import Button from "@mui/material/Button";
 function Register() {
   const auth = getAuth(app);
   const database = getDatabase(app);
-
+   const history =  useNavigate();
   const [userEmail, setUserEmail] = useState<string>("");
   const [userPassword, setUserPassword] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
@@ -27,7 +27,7 @@ function Register() {
       setUserName(e.target.value);
   }
 
-  const loginSubmit = async (e: React.FormEvent) => {
+  const LoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const userCredential = await createUserWithEmailAndPassword(
       auth,
@@ -45,19 +45,20 @@ function Register() {
       following:{},
       friendRequest:{}
     });
+    history("/");
   };
   return (
     <div className="login-page flex items-center justify-center mt-20">
       <form
-        onSubmit={loginSubmit}
-        className="bg-slate-100 w-full max-w-screen-sm shadow-md rounded px-8 pt-6 pb-3 mb-4"
+        onSubmit={LoginSubmit}
+        className="w-full max-w-screen-sm bg-white border-solid border-2 border-grey-100 rounded-lg p-4 mb-4 flex justify-center"
       >
         <div className="md:flex md:items-center mb-2 mt-4">
-          <div className="flex flex-wrap -mx-3 mb-6 items-center justify-center">
-            <div className="w-full px-3 mb-6 md:mb-0">
+          <div className="flex flex-wrap items-center justify-center">
+            <div className="flex flex-col w-full px-3">
               <label
-                className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
-                htmlFor="grid-first-name"
+                className="block text-base text-gray-700 font-semibold mb-2"
+                htmlFor="grid-password"
               >
                 UserName
               </label>
@@ -72,8 +73,11 @@ function Register() {
                 onChange={handleNameChange}
               />
             </div>
-            <div className="w-full md:w-1/2 px-3">
-              <label className="block tracking-wide text-gray-700 text-xs font-bold mb-2">
+            <div className="flex flex-col w-full px-3">
+              <label
+                className="block text-base text-gray-700 font-semibold mb-2"
+                htmlFor="grid-password"
+              >
                 Email
               </label>
 
@@ -88,9 +92,9 @@ function Register() {
                 onChange={handleEmailChange}
               />
             </div>
-            <div className="w-full md:w-1/2 px-3">
+            <div className="flex flex-col w-full px-3">
               <label
-                className="block tracking-wide text-gray-700 text-xs font-bold mb-2"
+                className="block text-base text-gray-700 font-semibold mb-2"
                 htmlFor="grid-password"
               >
                 Password

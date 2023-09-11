@@ -19,42 +19,11 @@ import Followers from './components/Followers/Followers';
 import Following from './components/Following/Following';
 function App() {
 
-
-  const { userEmail } = useContext(AuthorizationContext);
-/*
-
-
-const auth = getAuth(app);
-const [userEmail, setUserEmail] = useState<string | null>("");
-
-
-
-  useEffect(() => {
-
-onAuthStateChanged(auth, (user) => {
-
-  if (user) {
-    setUserEmail(user.email);
-  }
-});
-  },[])
-*/
-  const PutData = () =>
-
-  {
-    const ServerInstace=Server();
-    ServerInstace.putData();
-  }
-
-
-
-console.log(userEmail+"userEMail");
   return (
     <div className="App">
       <AuthProvider>
         <Router>
           <Header></Header>
-          <button onClick={() => PutData()}>Put Data</button>
           <Routes>
             <Route path="/Login" element={<Login />} />
             <Route path="/Register" element={<Register />} />
