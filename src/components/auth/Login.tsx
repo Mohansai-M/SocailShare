@@ -27,12 +27,13 @@ function Login() {
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUserPassword(e.target.value);
   };
-
+ const history = useNavigate();
   const loginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     signInWithEmailAndPassword(auth, userEmail, userPassword)
       .then((value) => console.log(value))
       .catch((err) => console.log(err));
+      history("/");
   };
 
   return (

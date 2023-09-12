@@ -14,6 +14,7 @@ function MainPage() {
     listAllPosts,
     setFilteredPosts,
     setLikedBy,
+    LikedBy,
   } = useContext(AuthorizationContext);
 
   const [Post, setPost] = useState<File | null>(null);
@@ -21,7 +22,8 @@ function MainPage() {
   const [Name, setName] = useState("");
   const [Caption, setCaption] = useState("");
   const [CommonPosts, setCommonPosts] = useState<any | null>([]);
-  const [CommonIds, setCommonIds] = useState<any | null>([]);
+  const [CommonIds, setCommonIds] = useState<Set<any>>(new Set());
+  const [loading,setLoading] = useState(true)
 
   const HandlePostUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -43,12 +45,15 @@ function MainPage() {
   const LikedPostsFilter =  (FilteredLocal: any[]) => {
     const LikedPosts: any[] = [];
     FilteredLocal.map((post: any) => {
+
       if (userId === Object.keys(post.likes)[0]) {
         LikedPosts.push(post.ImageID);
+
+        console.log(Object.values(post.likes)[0], Object.keys(post.likes)[0]);
       }
       setLikedBy(LikedPosts);
     });
-
+    setLoading(false);
     return LikedPosts;
   };
 
@@ -72,8 +77,8 @@ function MainPage() {
     const commonPostsIds = new Set(
       LikesLocal.map((LikedPost: any) => LikedPost)
     );
+    
     setCommonIds(commonPostsIds);
-
     const commonPosts = FilteredPosts.filter((post: any) =>
       commonPostsIds.has(post.id)
     );
@@ -88,10 +93,7 @@ function MainPage() {
      });
      const FilteredLocal = FilterPosts(postsByFriends);
      const LikesLocal = LikedPostsFilter(FilteredLocal);
-      const commonPostsIds = new Set(
-        LikesLocal.map((LikedPost: any) => LikedPost)
-      );
-      setCommonIds(commonPostsIds);
+     FilterLikes(LikesLocal)
      setPosts(postsByFriends);
    });
   },[Following]);
@@ -106,14 +108,16 @@ function MainPage() {
 </form>
 
       <div>
-        {FilteredPosts.filter((post: any) => CommonIds.has(post.ImageID)).map(
+        {loading && <div>Loading...</div>}
+        {!loading && 
+          CommonIds ? FilteredPosts.filter((post: any) => CommonIds.has(post.ImageID)).map(
           (post: any) => (
-            <Feed key={post.id} post={post} isLiked={true} {...post} />
+            <Feed key={post.id} post={post} isLiked={Object.values(post.likes)[0]} {...post} />
           )
-        )}
+        ):null}
         {FilteredPosts.filter((post: any) => !CommonIds.has(post.ImageID)).map(
           (post: any) => (
-            <Feed key={post.id} post={post} isLiked={false} {...post} />
+            <Feed key={post.id} post={post} isLiked={Object.values(post.likes)[0]} {...post} />
           )
         )}
       </div>

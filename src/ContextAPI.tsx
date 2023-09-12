@@ -1,8 +1,20 @@
 import { createContext, useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from "./server/FireBase";
-import { getDatabase,ref as Ref,get,onValue,update } from "firebase/database";
-import { getFirestore, collection, addDoc, getDocs, updateDoc, } from "firebase/firestore";
+import {
+  getDatabase,
+  ref as Ref,
+  get,
+  onValue,
+  update,
+} from "firebase/database";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  updateDoc,
+} from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export const AuthorizationContext = createContext<any>("");
@@ -23,8 +35,8 @@ const AuthProvider = (props: any) => {
   const [FriendRequests, setFriendRequests] = useState([]);
   const [userIds, setUserIds] = useState<any>([]);
   const [FriendRequestsSent, setFriendRequestsSent] = useState([]);
+  const [userName, setuserName] = useState<string | null>("");
   const [FriendRequestsReceived, setFriendRequestsReceived] = useState([]);
-  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -46,6 +58,7 @@ const AuthProvider = (props: any) => {
             setFollowers(userData.followers);
             setFollowing(userData.following);
             setFriendRequests(userData.friendRequests);
+            setuserName(userData.userName);
           } else {
             console.log("Not Working");
           }
@@ -59,11 +72,8 @@ const AuthProvider = (props: any) => {
         setUserEmail(null);
         setLoading(false);
       }
-
-    
     });
 
-    console.log(PostDocs)
     const userCountRef = Ref(database, "users");
     onValue(userCountRef, (snapshot) => {
       const data = snapshot.val();
@@ -160,9 +170,7 @@ const AuthProvider = (props: any) => {
     }
     userData.friendRequestsSent.push(Name);
 
-    await update(Ref(database, `users/${Name}/friendRequestsReceived`), {
-     
-    });
+    await update(Ref(database, `users/${Name}/friendRequestsReceived`), {});
     await update(userRef, userData);
   };
 
@@ -206,23 +214,24 @@ const AuthProvider = (props: any) => {
     await update(userRef, userData);
   };
 
-  const CancelRequestHandler = async (Name: string,userId:any) => {
+  const CancelRequestHandler = async (Name: string, userId: any) => {
     const userRef = Ref(database, `users/${userId}`);
     const userSnapshot = await get(userRef);
     const userData = userSnapshot.val();
     const NameRef = Ref(database, `users/${Name}`);
     const Namesnapshot = await get(NameRef);
     const NameData = Namesnapshot.val();
-   if (Object.values(userData.friendRequestsSent).includes(Name)) {
-     userData.friendRequestsSent.splice(
-       Object.values(userData.friendRequestsSent).indexOf(Name),
-       1
-     );}
-   
-    if (Object.values(NameData.friendRequestsReceived).includes(userId)) {
-      const friendRequestsReceived = NameData.friendRequestsReceived["userId"];
-      console.log(typeof(friendRequestsReceived))
+    if (Object.values(userData.friendRequestsSent).includes(Name)) {
+      userData.friendRequestsSent.splice(
+        Object.values(userData.friendRequestsSent).indexOf(Name),
+        1
+      );
     }
+
+    /*if (Object.values(NameData.friendRequestsReceived).includes(userId)) {
+      const friendRequestsReceived = NameData.friendRequestsReceived["userId"];
+      console.log(typeof friendRequestsReceived);
+    }*/
 
     await update(userRef, userData);
     await update(NameRef, NameData);
@@ -256,6 +265,7 @@ const AuthProvider = (props: any) => {
         LikedBy,
         setFilteredPosts,
         setLikedBy,
+        userName
       }}
     >
       {props.children}

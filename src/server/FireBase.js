@@ -4,14 +4,14 @@ import {initializeApp} from 'firebase/app'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyAIla5WVZ14ilmmW4kopLa6H7F2WwNgPqc",
-  authDomain: "social-share-b3d18.firebaseapp.com",
-  projectId: "social-share-b3d18",
-  databaseURL: "https://social-share-b3d18-default-rtdb.firebaseio.com/",
-  
-  storageBucket: "social-share-b3d18.appspot.com",
-  messagingSenderId: "458412278379",
-  appId: "1:458412278379:web:29ea7c0866611ab072272e",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  databaseURL: process.env.REACT_APP_DATABASE_URL,
+
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
 };
 
 // Initialize Firebase

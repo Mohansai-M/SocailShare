@@ -18,7 +18,7 @@ const friendRequestsReceivedLength = Object.keys(FriendRequestsReceived).length;
     <div className="col-span-2 rounded-xl shadow border h-30 bg-gray-100 text-gray-800">
       <h1 className="text-3xl font-bold mb-4">FriendRequests Received</h1>
       <div className="grid grid-cols-1 gap-2">
-        {friendRequestsReceivedLength > 0 ? (
+        {Object.hasOwnProperty(FriendRequestsReceived)  ? (
           Object.keys(FriendRequestsReceived).map((Id) => (
             <div className="flex justify-center">
               <div className="w-11/12 flex items-center border-solid border-1 border-gray-300 py-1 px-2  bg-gray-100 rounded-xl">
