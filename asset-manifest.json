@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/socialshare/static/css/main.28981e0e.css",
+    "main.js": "/socialshare/static/js/main.79df0a48.js",
+    "static/js/787.9b38e336.chunk.js": "/socialshare/static/js/787.9b38e336.chunk.js",
+    "index.html": "/socialshare/index.html",
+    "main.28981e0e.css.map": "/socialshare/static/css/main.28981e0e.css.map",
+    "main.79df0a48.js.map": "/socialshare/static/js/main.79df0a48.js.map",
+    "787.9b38e336.chunk.js.map": "/socialshare/static/js/787.9b38e336.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.28981e0e.css",
+    "static/js/main.79df0a48.js"
+  ]
+}
