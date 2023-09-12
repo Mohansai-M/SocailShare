@@ -27,7 +27,7 @@ function App() {
           <Routes>
             <Route path="/Login" element={<Login />} />
             <Route path="/Register" element={<Register />} />
-            <Route path="/" element={<ProtectedRoute><WebPage /></ProtectedRoute>} />
+            <Route path="/SocialShare" element={<ProtectedRoute><WebPage /></ProtectedRoute>} />
             <Route path="/FriendRequestsReceived" element={<FriendRequestReceived />} />
             <Route path="/FriendRequestSent" element={<FriendRequestSent />} />
             <Route path="/Followers" element={<Followers />} />
