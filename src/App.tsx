@@ -22,12 +22,12 @@ function App() {
   return (
     <div className="App">
       <AuthProvider>
-        <Router>
+        <Router basename='/'>
           <Header></Header>
           <Routes>
             <Route path="/Login" element={<Login />} />
             <Route path="/Register" element={<Register />} />
-            <Route path="/SocialShare" element={<ProtectedRoute><WebPage /></ProtectedRoute>} />
+            <Route path="/" element={<ProtectedRoute><WebPage /></ProtectedRoute>} />
             <Route path="/FriendRequestsReceived" element={<FriendRequestReceived />} />
             <Route path="/FriendRequestSent" element={<FriendRequestSent />} />
             <Route path="/Followers" element={<Followers />} />

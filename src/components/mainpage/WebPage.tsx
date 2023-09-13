@@ -12,12 +12,11 @@ function WebPage() {
   ];
 
   return (
-    <div className="bg-gray-100 min-h-screen p-4">
+    <div className="bg-gray-100 min-h-screen p-4  transition: width 1s ease-in-out;">
       <div className="mx-auto">
-        <h1 className="text-3xl font-semibold mb-4">Social Media Cards</h1>
         <div className="flex flex-wrap">
           {/* 1st Card - Shown on all screen sizes */}
-          <div className="w-full lg:w-1/4">
+          <div className="w-full lg:w-1/4 h-40">
             <div className="bg-white rounded-lg shadow-lg p-4 m-4">
               <Personal></Personal>
             </div>

@@ -1,7 +1,10 @@
 import { useContext } from "react";
 import { AuthorizationContext } from "../../ContextAPI";
 import { Link } from "react-router-dom";
-
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import GroupIcon from "@mui/icons-material/Group";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 function Personal() {
 
  const {
@@ -50,7 +53,7 @@ function Personal() {
                 ) : null}
               </span>
             </span>
-            <span className="border-solid border-1 border-gray-300 mb-1hidden lg:inline-block py-3 px-6 bg-gray-100 hover:bg-gray-300 rounded-xl  transition duration-200">
+            <span className="border-solid border-1 border-gray-300 mb-1 hidden lg:inline-block py-3 px-6 bg-gray-100 hover:bg-gray-300 rounded-xl  transition duration-200">
               <Link
                 className="py-3 px-6 text-sm text-gray-900 font-bold transition duration-200"
                 to="/Followers"
@@ -65,6 +68,17 @@ function Personal() {
                 ) : null}
               </span>
             </span>
+          </div>
+        </div>
+        <div className="lg:hidden">
+          <div className="flex justify-center items-center">
+            <div className="lg:hidden grid lg:justify-items-center justify-items-auto grid-cols-4  grid-flow-row gap-9 auto-rows-auto items-center">
+              {/* Alternative content (icons) goes here */}
+              <AccountCircleIcon style={{ fontSize: "2.5rem"}} className="Icons"/>
+              <GroupIcon style={{ fontSize: "2.5rem" }} />
+              <PersonAddIcon style={{ fontSize: "2.5rem" }} />
+              <FavoriteBorderIcon style={{ fontSize: "2.5rem" }} />
+            </div>
           </div>
         </div>
       </div>
