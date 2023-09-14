@@ -99,13 +99,13 @@ function MainPage() {
   },[Following]);
 
   return (
-    <div className="mainPage col-span-4 rounded-xl border h-30 white">
-  
-  <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+    <div className="mainPage col-span-4 rounded-xl h-30 white">
+  <div className="bg-white rounded-lg shadow-lg">
+  <form onSubmit={handleSubmit} className="grid grid-rows-2 grid-cols-2 space-y-4 py-1">
   <input type="file" accept="image/*" onChange={HandlePostUpload} className="py-2 px-4 border rounded-lg" />
   <input onChange={(e) => setCaption(e.target.value)} type="text" className="py-2 px-4 border rounded-lg" placeholder="Provide a Caption"/>
   <button type="submit" className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg">Post</button>
-</form>
+  </form>  </div>
 
       <div>
         {loading && <div>Loading...</div>}

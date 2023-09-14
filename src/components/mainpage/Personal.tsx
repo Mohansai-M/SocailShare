@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext ,useEffect} from "react";
 import { AuthorizationContext } from "../../ContextAPI";
 import { Link } from "react-router-dom";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -11,10 +11,17 @@ function Personal() {
    userId,
    userName,userEmail,
    loading,
+   Likes,
    Followers,
    Following,
+   UserData,
    FriendRequests,
  } = useContext(AuthorizationContext);
+
+   useEffect(() => {
+     console.log(Followers);
+     console.log("UserData")
+   }, [userId]);
 
 
 
@@ -35,7 +42,7 @@ function Personal() {
                 Liked Posts
               </Link>
               <span className="bg-slate-600 hover:bg-slate-800 text-lg text-white rounded-full  px-2 h-24 w-24">
-                {3}
+                {Likes != null ? Object.keys(Followers).length : <></>}
               </span>
             </span>
             <span className="border-solid border-1 border-gray-300 mb-1 hidden lg:inline-block  py-3 px-6 bg-gray-100 hover:bg-gray-300 rounded-xl  transition duration-200">
@@ -46,11 +53,9 @@ function Personal() {
                 Followers
               </Link>
               <span className="bg-slate-600 hover:bg-slate-800 text-lg text-white rounded-full  px-2 h-24 w-24">
-                {Object.hasOwnProperty(Followers) ? (
-                  <span className="bg-slate-600 hover:bg-slate-800 text-lg text-white rounded-full px-2 h-24 w-24">
-                    {Object.keys(Followers).length}
-                  </span>
-                ) : null}
+                <span className="bg-slate-600 hover:bg  -slate-800 text-lg text-white rounded-full px-2 h-24 w-24">
+                  {Followers != null ? Object.keys(Followers).length : <></>}
+                </span>
               </span>
             </span>
             <span className="border-solid border-1 border-gray-300 mb-1 hidden lg:inline-block py-3 px-6 bg-gray-100 hover:bg-gray-300 rounded-xl  transition duration-200">
@@ -61,11 +66,9 @@ function Personal() {
                 Following
               </Link>
               <span className="bg-slate-600 hover:bg-slate-800 text-lg text-white rounded-full  px-2 h-24 w-24">
-                {Object.hasOwnProperty(Following) ? (
-                  <span className="bg-slate-600 hover:bg-slate-800 text-lg text-white rounded-full px-2 h-24 w-24">
-                    {Object.keys(Following).length}
-                  </span>
-                ) : null}
+                <span className="bg-slate-600 hover:bg-slate-800 text-lg text-white rounded-full px-2 h-24 w-24">
+                  {Following != null ? Object.keys(Following).length : <></>}
+                </span>
               </span>
             </span>
           </div>
@@ -74,7 +77,10 @@ function Personal() {
           <div className="flex justify-center items-center">
             <div className="lg:hidden grid lg:justify-items-center justify-items-auto grid-cols-4  grid-flow-row gap-9 auto-rows-auto items-center">
               {/* Alternative content (icons) goes here */}
-              <AccountCircleIcon style={{ fontSize: "2.5rem"}} className="Icons"/>
+              <AccountCircleIcon
+                style={{ fontSize: "2.5rem" }}
+                className="Icons"
+              />
               <GroupIcon style={{ fontSize: "2.5rem" }} />
               <PersonAddIcon style={{ fontSize: "2.5rem" }} />
               <FavoriteBorderIcon style={{ fontSize: "2.5rem" }} />

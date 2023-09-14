@@ -81,14 +81,14 @@ function Login() {
             </div>
             <div className="mt-5">
               <div className="flex space-x-4">
-                <Button variant="contained" type="submit">
+                <button className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  rounded-xl transition duration-200" type="submit">
                   Login
-                </Button>
-                <Button variant="contained">
+                </button>
+                <button className="hidden lg:inline-block py-2 px-6 bg-gray-900 hover:bg-gray-600 text-sm text-white font-bold rounded-xl transition duration-200">
                   <Link to="/Register" className="navlink">
                     Register
                   </Link>
-                </Button>
+                </button>
               </div>
             </div>
           </div>

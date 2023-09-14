@@ -1,27 +1,3 @@
-.NavBar
-{
-    display: flex;
-    justify-content: space-between;
-        justify-content: space-between;
-    align-items: stretch;
-}
-.NavList
-{
-    display: flex;
-    flex-direction: row;
-
-
-}
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
-
-.NavItems
-{
-    padding-left: 1rem;
-    padding-right: 1rem ;
-    border: 0.1rem solid red;
-    border-radius: 0.2rem;
+.CheckNav{
+  display: inline-block;
 }

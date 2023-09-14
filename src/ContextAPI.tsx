@@ -26,11 +26,12 @@ const storage = getStorage(app);
 const AuthProvider = (props: any) => {
   const [userEmail, setUserEmail] = useState<string | null>("");
   const [FilteredPosts, setFilteredPosts] = useState<any>([]);
-  const [PostDocs, setPostDocs] = useState<any>([]);
+  const [UserData, setUserData] = useState<any>([]);
   const [userId, setUserId] = useState<string | null>("");
   const [loading, setLoading] = useState(true);
   const [Followers, setFollowers] = useState([]);
   const [Following, setFollowing] = useState([]);
+  const [Likes, setLikes] = useState([]);
   const [LikedBy, setLikedBy] = useState<any>([]);
   const [FriendRequests, setFriendRequests] = useState([]);
   const [userIds, setUserIds] = useState<any>([]);
@@ -55,8 +56,10 @@ const AuthProvider = (props: any) => {
           if (userSnapshot.exists()) {
             // Handle user data if needed
             const userData = userSnapshot.val();
+            setUserData(userData);
             setFollowers(userData.followers);
             setFollowing(userData.following);
+            setLikes(userData.Likes);
             setFriendRequests(userData.friendRequests);
             setuserName(userData.userName);
           } else {
@@ -244,6 +247,7 @@ const AuthProvider = (props: any) => {
       value={{
         userId,
         userEmail,
+        Likes,
         loading,
         LoggedIn,
         Followers,
@@ -265,7 +269,8 @@ const AuthProvider = (props: any) => {
         LikedBy,
         setFilteredPosts,
         setLikedBy,
-        userName
+        userName,
+        UserData
       }}
     >
       {props.children}
